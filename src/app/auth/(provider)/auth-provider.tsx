@@ -1,12 +1,12 @@
 "use client";
 import supabase from "@/services/supabaseClient";
 import { ReactNode, useContext, useEffect, useState } from "react";
-import { Tables } from "../../database.types";
+import { Tables } from "../../../../database.types";
 import { UserDetailsContext } from "@/context/user-details-context";
 
 type Props = { children: ReactNode };
 
-export default function Provider({ children }: Props) {
+export default function AuthProvider({ children }: Props) {
   const [user, setUser] = useState<Tables<"Users"> | null>(null);
   const createNewUser = () => {
     supabase.auth.getUser().then(async ({ data: { user } }) => {
