@@ -6,4 +6,10 @@ type SideBarOptionsTS = {
   path: string;
 };
 
-export type { SideBarOptionsTS };
+type InterviewTypeTS = {
+  title: string;
+  value: string;
+  icon: LucideIcon;
+};
+
+export type { SideBarOptionsTS, InterviewTypeTS };

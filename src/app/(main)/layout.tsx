@@ -9,7 +9,7 @@ export default function DashboardLayout({ children }: Props) {
   return (
     <div className="bg-secondary">
       <DashboardProvider>
-        <div className="p-10">{children}</div>
+        <div>{children}</div>
       </DashboardProvider>
     </div>
   );
