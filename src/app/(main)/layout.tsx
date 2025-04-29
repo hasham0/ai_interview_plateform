@@ -7,8 +7,10 @@ type Props = {
 
 export default function DashboardLayout({ children }: Props) {
   return (
-    <div>
-      <DashboardProvider>{children}</DashboardProvider>
+    <div className="bg-secondary">
+      <DashboardProvider>
+        <div className="p-10">{children}</div>
+      </DashboardProvider>
     </div>
   );
 }

@@ -10,7 +10,7 @@ export default function DashboardProvider({ children }: Props) {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <div className="">
+      <div className="w-full">
         <SidebarTrigger />
         {children}
       </div>
