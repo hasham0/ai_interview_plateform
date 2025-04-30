@@ -25,10 +25,14 @@ import {
 } from "@/components/ui/select";
 import { InterviewTypes } from "@/services/constant";
 import { ArrowRight } from "lucide-react";
+import { Dispatch, SetStateAction } from "react";
 
-type Props = {};
+type Props = {
+  onNextStep: () => void;
+  setFormData: Dispatch<SetStateAction<CreateInterviewTS>>;
+};
 
-const FormContainer = (props: Props) => {
+const FormContainer = ({ onNextStep, setFormData }: Props) => {
   const form = useForm<CreateInterviewTS>({
     resolver: zodResolver(createInerviewSchema),
     defaultValues: {
@@ -40,7 +44,13 @@ const FormContainer = (props: Props) => {
   });
 
   const onSubmitHandler: SubmitHandler<CreateInterviewTS> = (data) => {
-    console.log(data);
+    setFormData({
+      jobPosition: data.jobPosition,
+      jobDescription: data.jobDescription,
+      interviewDuration: data.interviewDuration,
+      interviewType: data.interviewType,
+    });
+    onNextStep();
   };
 
   return (
@@ -106,7 +116,7 @@ const FormContainer = (props: Props) => {
                 <FormMessage />
               </FormItem>
             )}
-          />{" "}
+          />
           <FormField
             control={form.control}
             name="interviewType"
@@ -144,7 +154,7 @@ const FormContainer = (props: Props) => {
             )}
           />
           <div className="flex justify-end">
-            <Button type="submit" className="">
+            <Button type="submit">
               Generate Question
               <ArrowRight />
             </Button>

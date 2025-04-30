@@ -1,6 +1,5 @@
 import CreateOptions from "./_components/create-options";
 import LatestInterviewsList from "./_components/latest-interviews-list";
-import WelcomeContainer from "./_components/welcome-container";
 
 type Props = {};
 

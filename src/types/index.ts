@@ -12,4 +12,11 @@ type InterviewTypeTS = {
   icon: LucideIcon;
 };
 
-export type { SideBarOptionsTS, InterviewTypeTS };
+type QuestionsTS = {
+  interviewQuestions: Array<{
+    question: string;
+    type: string;
+  }>;
+};
+
+export type { SideBarOptionsTS, InterviewTypeTS, QuestionsTS };

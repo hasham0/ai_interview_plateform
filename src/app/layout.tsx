@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Libre_Franklin } from "next/font/google";
 import "./globals.css";
 import AuthProvider from "@/app/auth/(provider)/auth-provider";
+import { Toaster } from "@/components/ui/sonner";
 
 const libreFranklin = Libre_Franklin({
   variable: "--font-libre-franklin",
@@ -23,6 +24,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${libreFranklin.variable} antialiased`}>
         <AuthProvider>{children}</AuthProvider>
+        <Toaster />
       </body>
     </html>
   );

@@ -9,6 +9,42 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      interview_questions: {
+        Row: {
+          created_at: string
+          id: number
+          interview_id: string | null
+          interviewDuration: string | null
+          jobDescription: string | null
+          jobPosition: string | null
+          questionList: Json | null
+          type: string | null
+          userEmail: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+          interview_id?: string | null
+          interviewDuration?: string | null
+          jobDescription?: string | null
+          jobPosition?: string | null
+          questionList?: Json | null
+          type?: string | null
+          userEmail?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: number
+          interview_id?: string | null
+          interviewDuration?: string | null
+          jobDescription?: string | null
+          jobPosition?: string | null
+          questionList?: Json | null
+          type?: string | null
+          userEmail?: string | null
+        }
+        Relationships: []
+      }
       Users: {
         Row: {
           created_at: string
