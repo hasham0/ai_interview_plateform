@@ -13,9 +13,10 @@ import { v4 as uuidV4 } from "uuid";
 
 type Props = {
   formData: CreateInterviewTS;
+  onCreateLink: (interview_id: string) => void;
 };
 
-const QuestionList = ({ formData }: Props) => {
+const QuestionList = ({ formData, onCreateLink }: Props) => {
   const { user } = useUserDetailsContext();
   const [loading, setLoading] = useState<boolean>(false);
   const [saveLoading, setSaveLoading] = useState<boolean>(false);
@@ -75,6 +76,7 @@ const QuestionList = ({ formData }: Props) => {
       if (!data || error) {
         throw new Error("Failed to save interview questions");
       }
+      onCreateLink(interview_id);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.error(error);
