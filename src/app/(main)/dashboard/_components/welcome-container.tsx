@@ -17,7 +17,7 @@ const WelcomeContainer = ({}: Props) => {
       </div>
       {user && (
         <Image
-          src={user?.picture || "/default-picture.png"}
+          src={user?.picture || "/assets/person.jpg"}
           width={50}
           height={50}
           alt={user?.name || "Default Name"}

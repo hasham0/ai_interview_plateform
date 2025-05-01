@@ -21,7 +21,7 @@ const InterviewLink = ({ formData, interviewId }: Props) => {
   return (
     <div className="mt-10 flex w-full flex-col items-center justify-center">
       <Image
-        src={"/checked.png"}
+        src={"/assets/checked.png"}
         width={200}
         height={200}
         alt={"checked"}

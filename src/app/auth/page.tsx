@@ -20,7 +20,7 @@ export default function Auth({}: Props) {
       <div className="flex flex-col items-center rounded-2xl border p-8">
         <div className="flex w-full items-center justify-center gap-x-3">
           <Image
-            src={"/logo.png"}
+            src={"/assets/logo.png"}
             width={100}
             height={150}
             alt={"logo"}
@@ -32,7 +32,7 @@ export default function Auth({}: Props) {
         </div>
         <div className="flex flex-col items-center">
           <Image
-            src={"/login.jpg"}
+            src={"/assets/login.jpg"}
             width={400}
             height={400}
             alt={"login picture"}

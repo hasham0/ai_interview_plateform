@@ -24,7 +24,7 @@ const AppSidebar = (props: Props) => {
     <Sidebar>
       <SidebarHeader className="mt-5 flex items-center">
         <Image
-          src={"/logo.png"}
+          src={"/assets/logo.png"}
           width={100}
           height={100}
           alt={"logo"}
