@@ -67,7 +67,7 @@ const QuestionList = ({ formData, onCreateLink }: Props) => {
             jobDescription: formData.jobDescription,
             interviewDuration: formData.interviewDuration,
             type: formData.interviewType.join(", "),
-            questionList: JSON.stringify(questionsList),
+            questionList: questionsList,
             userEmail: user?.email,
             interview_id,
           },

@@ -1,9 +1,13 @@
 "use client";
 import { useInterviewDetailsContext } from "@/context/interview-details-context";
-import { Mic, Phone, Timer } from "lucide-react";
+import { CirclePlay, Mic, Phone, Timer } from "lucide-react";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
+import Vapi from "@vapi-ai/web";
+import { QuestionsTS } from "@/types";
+import AlertConfirmation from "../../_components/alert-confirmation";
+import { toast } from "sonner";
 
 type Props = {};
 
@@ -11,7 +15,108 @@ export default function StartInterview({}: Props) {
   const { interviewDetails, setInterviewDetails } =
     useInterviewDetailsContext();
   const { interview_id } = useParams<{ interview_id: string }>();
+  const [hasStarted, setHasStarted] = useState(false);
+  const [activeUser, setActiveUser] = useState<boolean>(false);
+  const vapiRef = useRef<Vapi | null>(
+    new Vapi(process.env.NEXT_PUBLIC_VAPI_API_KEY as string)
+  );
 
+  useEffect(() => {
+    if (typeof window !== "undefined" && interviewDetails) {
+      startInterviewCall();
+    }
+    return () => {
+      stopInterviewCall();
+    };
+  }, [interviewDetails]);
+
+  const handleStartInterview = () => {
+    startInterviewCall();
+    setHasStarted(true);
+  };
+  const startInterviewCall = () => {
+    if (vapiRef.current) {
+      console.warn("Vapi already started");
+      return;
+    }
+
+    try {
+      let questionList = "";
+
+      if (interviewDetails) {
+        const data: QuestionsTS["interviewQuestions"] = JSON.parse(
+          interviewDetails.questionList as string
+        );
+
+        data.forEach((item) => {
+          const question =
+            item.question as unknown as QuestionsTS["interviewQuestions"][0]["question"];
+          return (questionList = question + "," + questionList);
+        });
+      }
+      vapiRef.current = new Vapi(
+        process.env.NEXT_PUBLIC_VAPI_API_KEY as string
+      );
+
+      const assistantOptions = {
+        name: "AI Recruiter",
+        firstMessage: `Hi ${interviewDetails?.userName}, how are you? Ready for your interview on ${interviewDetails?.jobPosition}?`,
+        transcriber: {
+          provider: "deepgram" as const,
+          model: "nova-2",
+          language: "en-US" as const,
+        },
+        voice: {
+          provider: "playht" as const,
+          voiceId: "jennifer",
+        },
+        model: {
+          provider: "openai" as const,
+          model: "gpt-3.5-turbo" as const,
+          messages: [
+            {
+              role: "system" as const,
+              content:
+                `You are an AI voice assistant conducting interviews.Your job is to ask candidates provided interview questions, assess their responses.Begin the conversation with a friendly introduction, setting a relaxed yet professional tone. Example:"Hey there! Welcome to your ${interviewDetails?.jobPosition} interview. Let’s get started with a few questions!"Ask one question at a time and wait for the candidate’s response before proceeding. Keep the questions clear and concise. Below Are the questions ask one by one:Questions: ${questionList}.If the candidate struggles, offer hints or rephrase the question without giving away the answer. Example:"Need a hint? Think about how React tracks component updates!"Provide brief, encouraging feedback after each answer. Example:"Nice! That’s a solid answer.""Hmm, not quite! Want to try again?"Keep the conversation natural and engaging—use casual phrases like "Alright, next up..." or "Let’s tackle a tricky one!"After 5-7 questions, wrap up the interview smoothly by summarizing their performance. Example:"That was great! You handled some tough questions well. Keep sharpening your skills!"End on a positive note:
+              "Thanks for chatting! Hope to see you crushing projects soon!"
+              Key Guidelines:
+              ✅ Be friendly, engaging, and witty 🎤
+              ✅ Keep responses short and natural, like a real conversation
+              ✅ Adapt based on the candidate’s confidence level
+              ✅ Ensure the interview remains focused on React
+              `.trim(),
+            },
+          ],
+        },
+      };
+
+      vapiRef.current.start(assistantOptions);
+      vapiRef.current.on("error", (error) => {
+        console.log(error);
+      });
+    } catch (error) {
+      console.error("Error parsing questionList:", error);
+    }
+  };
+
+  const stopInterviewCall = () => {
+    vapiRef.current?.stop();
+    vapiRef.current = null;
+    setHasStarted(false);
+    setActiveUser(false);
+  };
+  vapiRef?.current?.on("call-start", () => {
+    toast.success("Call Connected...");
+  });
+  vapiRef?.current?.on("speech-start", () => {
+    setActiveUser(false);
+  });
+  vapiRef?.current?.on("speech-end", () => {
+    setActiveUser(true);
+  });
+  vapiRef?.current?.on("call-end", () => {
+    toast.success("Interview Ended...");
+  });
   return (
     <div className="p-20 lg:px-48 xl:px-56">
       <h2 className="flex justify-between text-xl font-bold">
@@ -23,29 +128,44 @@ export default function StartInterview({}: Props) {
       </h2>
       <div className="mt-5 grid grid-cols-1 gap-7 md:grid-cols-2">
         <div className="flex h-[400px] flex-col items-center justify-center gap-3 rounded-lg border bg-white">
-          <Image
-            src={"/assets/person.jpg"}
-            width={200}
-            height={200}
-            alt={"logo"}
-            className="h-[100px] w-[100px] rounded-full object-center"
-          />
+          <div className="relative">
+            {activeUser && (
+              <span className="bg-primary absolute inset-0 animate-ping rounded-full opacity-75" />
+            )}
+            <Image
+              src={"/assets/person.jpg"}
+              width={200}
+              height={200}
+              alt={"logo"}
+              className="h-[100px] w-[100px] rounded-full object-center"
+            />
+          </div>
           <h2>AI Recruiter</h2>
         </div>
         <div className="flex h-[400px] flex-col items-center justify-center gap-3 rounded-lg border bg-white">
-          <h2 className="bg-primary rounded-full p-3 px-5 text-2xl text-white">
-            {interviewDetails?.userName[0] || "A"}
-          </h2>
-          <h2>{interviewDetails?.userName}</h2>
+          <div className="relative">
+            {activeUser && (
+              <span className="bg-primary absolute inset-0 animate-ping rounded-full opacity-75" />
+            )}
+            <h2 className="bg-primary flex h-[100px] w-[100px] items-center justify-center rounded-full text-2xl text-white">
+              {interviewDetails?.userName[0] || "A"}
+            </h2>
+          </div>
+          <h2 className="z-10">{interviewDetails?.userName}</h2>
         </div>
       </div>
       <div className="mt-7 flex items-center justify-center gap-5">
+        {!hasStarted ? (
+          <button onClick={handleStartInterview}>
+            <CirclePlay className="size-12 cursor-pointer rounded-full bg-green-500 p-3 text-white" />
+          </button>
+        ) : (
+          <AlertConfirmation stopInterview={stopInterviewCall}>
+            <Phone className="size-12 cursor-pointer rounded-full bg-red-500 p-3 text-white" />
+          </AlertConfirmation>
+        )}
         <Mic className="size-12 cursor-pointer rounded-full bg-gray-500 p-3 text-white" />
-        <Phone className="size-12 cursor-pointer rounded-full bg-red-500 p-3 text-white" />
       </div>
-      <h2 className="mt-5 text-center text-sm text-gray-400">
-        Interview in Progress...
-      </h2>
     </div>
   );
 }

@@ -21,12 +21,12 @@ export async function POST(request: NextRequest) {
       );
 
     const openai = new OpenAI({
-      baseURL: "https://api.together.xyz/v1",
-      apiKey: process.env.TOGETHER_API_KEY as string,
+      baseURL: "https://openrouter.ai/api/v1",
+      apiKey: process.env.OPEN_ROUTER_API_KEY as string,
     });
 
     const completion = await openai.chat.completions.create({
-      model: "meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo",
+      model: "${Model.GPT_4_Omni}",
       messages: [{ role: "user", content: FINAL_PROMPT }],
       response_format: {
         type: "json_object",

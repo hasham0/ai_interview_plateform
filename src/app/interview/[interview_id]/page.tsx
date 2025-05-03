@@ -26,6 +26,8 @@ export default function Interview({}: Props) {
   > | null>(null);
 
   const [userName, setUserName] = useState<string>("");
+  const [userEmail, setUserEmail] = useState<string>("");
+
   const [loading, setLoading] = useState<boolean>(false);
   const { interviewDetails, setInterviewDetails } =
     useInterviewDetailsContext();
@@ -122,9 +124,20 @@ export default function Interview({}: Props) {
         <div className="mt-3 w-full">
           <h2 className="font-bold">Enter Your Full Name</h2>
           <Input
+            type="text"
             placeholder="e.g. Jhon Doe"
             onChange={(event: ChangeEvent<HTMLInputElement>) =>
               setUserName(event.target.value)
+            }
+          />
+        </div>
+        <div className="mt-3 w-full">
+          <h2 className="font-bold">Enter Your Email</h2>
+          <Input
+            type="email"
+            placeholder="e.g. JhonDoe@gmail.com"
+            onChange={(event: ChangeEvent<HTMLInputElement>) =>
+              setUserEmail(event.target.value)
             }
           />
         </div>
