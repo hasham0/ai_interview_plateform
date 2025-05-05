@@ -19,4 +19,9 @@ type QuestionsTS = {
   }>;
 };
 
-export type { SideBarOptionsTS, InterviewTypeTS, QuestionsTS };
+type ConversationTS = {
+  role: "system" | "assistant" | "user";
+  content: "";
+};
+
+export type { SideBarOptionsTS, InterviewTypeTS, QuestionsTS, ConversationTS };

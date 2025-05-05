@@ -29,8 +29,7 @@ export default function Interview({}: Props) {
   const [userEmail, setUserEmail] = useState<string>("");
 
   const [loading, setLoading] = useState<boolean>(false);
-  const { interviewDetails, setInterviewDetails } =
-    useInterviewDetailsContext();
+  const { setInterviewDetails } = useInterviewDetailsContext();
 
   useEffect(() => {
     interview_id && getInterviewDetails();
@@ -83,7 +82,7 @@ export default function Interview({}: Props) {
         interviewDuration: interview[0].interviewDuration,
         questionList: interview[0].questionList,
         type: interview[0].type,
-        userEmail: interview[0].userEmail,
+        userEmail: interview[0].userEmail || userEmail,
       });
       router.push(`/interview/${interview_id}/start`);
     } catch (error) {
@@ -159,7 +158,7 @@ export default function Interview({}: Props) {
           </div>
         </div>
         <Button
-          disabled={loading || !userName}
+          disabled={loading || !userName || !userEmail}
           onClick={() => onJoinInterview()}
           className="mt-5 w-full font-bold"
         >
