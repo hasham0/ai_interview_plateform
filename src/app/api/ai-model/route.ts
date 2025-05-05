@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     });
 
     const completion = await openai.chat.completions.create({
-      model: "${Model.GPT_4_Omni}",
+      model: "${google/gemini-2.5-pro-exp-03-25}",
       messages: [{ role: "user", content: FINAL_PROMPT }],
       response_format: {
         type: "json_object",

@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
     });
 
     const completion = await openai.chat.completions.create({
-      model: "${Model.GPT_4_Omni}",
+      model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: FINAL_PROMPT }],
       response_format: {
         type: "json_object",

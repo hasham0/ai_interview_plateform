@@ -26,10 +26,14 @@ export default function Interview({}: Props) {
   > | null>(null);
 
   const [userName, setUserName] = useState<string>("");
-  const [userEmail, setUserEmail] = useState<string>("");
 
   const [loading, setLoading] = useState<boolean>(false);
-  const { setInterviewDetails } = useInterviewDetailsContext();
+  const { setInterviewDetails, interviewDetails } =
+    useInterviewDetailsContext();
+  console.log("🚀 ~ Interview ~ interviewDetails:", interviewDetails);
+  const [userEmail, setUserEmail] = useState<string>(
+    interviewDetails?.userEmail || ""
+  );
 
   useEffect(() => {
     interview_id && getInterviewDetails();
@@ -125,6 +129,7 @@ export default function Interview({}: Props) {
           <Input
             type="text"
             placeholder="e.g. Jhon Doe"
+            value={userName}
             onChange={(event: ChangeEvent<HTMLInputElement>) =>
               setUserName(event.target.value)
             }
@@ -134,6 +139,7 @@ export default function Interview({}: Props) {
           <h2 className="font-bold">Enter Your Email</h2>
           <Input
             type="email"
+            value={userEmail}
             placeholder="e.g. JhonDoe@gmail.com"
             onChange={(event: ChangeEvent<HTMLInputElement>) =>
               setUserEmail(event.target.value)
